@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate, logout
 from .models import ShoppingItem
 
 # Create your views here.
 
 
 def mylist(request):
-    # login(request, user)
+    if not request.user.is_authenticated:
+        return redirect(loginForm)
+
     if request.method == "POST":
         print("Received data: ", request.POST["itemName"])#
         ShoppingItem.objects.create(name=request.POST["itemName"])
@@ -27,5 +29,29 @@ def delete_item(request, id):
         item.save()
 
     return redirect(mylist)
+
+
+def loginForm(request):
+    if request.user.is_authenticated:
+        logout(request)
+        if request.user.is_authenticated:
+            print("not loged out :(")
+    return render(request, "loginForm.html", {'messages': ""})
+
+
+def loginformcheck(request):
+    print(request)
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            print("user ok")
+            login(request, user)
+            return redirect(mylist)
+        else:
+            print("User not ok")
+            message = "User not found"
+            return render(request, "loginForm.html", {'messages': message, "username": username, "password": password})
 
 

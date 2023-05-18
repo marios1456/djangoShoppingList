@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: rgba(0, 0, 0, 0.05);
+            margin: 0;
+        }
+
+        header {
+            background-color: rgb(133, 192, 45);
+            display: flex;
+            padding-left: 20px;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            width: 300px;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            margin-top: 30px;
+
+        }
+
+        /* Style the form group */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        /* Style the label */
+        label {
+            display: block;
+            font-weight: bold;
+        }
+
+        /* Style the input */
+        input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        /* Style the button */
+        button {
+            display: block;
+            width: 320px;
+            padding: 10px;
+            background-color: #04AA6D;
+            color: white;
+            border: none;
+        }
+
+        /* Add a hover effect for the button */
+        button:hover {
+            opacity: 0.8;
+        }
+
+        #error{
+            display: flex;
+            margin: 0 auto;
+            width: 300px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Einkaufsliste</h1>
+    </header>
+
+
+
+    <form action="/loginformcheck/" method="POST">
+        {% csrf_token %}
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter username"
+               value={% if username %}{{username}} {% else %} '' {% endif %} required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter password"
+               value={% if password %}{{password}} {% else %} '' {% endif %} required>
+      </div>
+      <div class="form-group">
+        <button type="submit">Login</button>
+      </div>
+    </form>
+
+    <div id="error">
+        {% if messages %}{{messages}}{% endif %}
+    </div>
+
+
+</body>
+
+</html>
