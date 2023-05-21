@@ -1,6 +1,9 @@
+#from django.conf.global_settings import AUTH_USER_MODEL
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from .models import ShoppingItem
+#from django.conf import settings
+from django.contrib.auth.models import User
 
 # Create your views here.
 
@@ -10,10 +13,10 @@ def mylist(request):
         return redirect(loginForm)
 
     if request.method == "POST":
-        print("Received data: ", request.POST["itemName"])#
-        ShoppingItem.objects.create(name=request.POST["itemName"])
+        print("Received data: ", request.POST["itemName"], "from user: ", request.user)#
+        ShoppingItem.objects.create(name=request.POST["itemName"], user= request.user)
 
-    all_items = ShoppingItem.objects.all()
+    all_items = ShoppingItem.objects.filter(user=request.user)
     return render(request, "shoping_list.html", {'all_items': all_items})
 
 
@@ -34,8 +37,6 @@ def delete_item(request, id):
 def loginForm(request):
     if request.user.is_authenticated:
         logout(request)
-        if request.user.is_authenticated:
-            print("not loged out :(")
     return render(request, "loginForm.html", {'messages': ""})
 
 
